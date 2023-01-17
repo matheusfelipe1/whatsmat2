@@ -21,4 +21,15 @@ extension ConvertToDateTime on String {
   DateTime date() {
     return DateTime.parse(this);
   }
+
+  String datePtBR() {
+    String firstSplit = this.split('T').first;
+    List<String> date = firstSplit.split('-');
+    return date.reversed.join('/');
+  }
+}
+
+enum UserStatus {
+  unlogged,
+  logged
 }

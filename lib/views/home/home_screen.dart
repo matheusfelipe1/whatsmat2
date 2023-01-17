@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:whatsmat/views/home/home.dart';
+import 'package:whatsmat/widgets/card_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +23,17 @@ class _HomeState extends State<HomeScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text('Home'),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(right: 15),
+              child: GestureDetector(
+                onTap: () async {
+                  await _home.signout();
+                },
+                child: const Icon(FontAwesomeIcons.signOut),
+              ),
+            )
+          ],
         ),
         body: Column(
           children: [
@@ -62,29 +74,28 @@ class _HomeState extends State<HomeScreen> {
               ),
             ),
             SizedBox(
-              height: size.height * .6,
+              height: size.height * .7,
               child: Observer(
                   warnWhenNoObservables: true,
                   builder: (_) {
                     return ListView.builder(
                       itemCount: _home.chats.length,
                       itemBuilder: ((context, index) {
-                        return const ListTile(
-                          leading: CircleAvatar(
-                              child: Center(
-                            child: Text('M'),
-                          )),
-                        );
+                        return CardList(
+                            datetime:
+                                _home.chats[index].messages!.last.datetime!,
+                            message: _home.chats[index].messages!.last.value!,
+                            name: _home.chats[index].profile!.name!);
                       }),
                     );
                   }),
             )
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _home.addChats,
-          child: const Icon(Icons.person_add),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: _home.addChats,
+        //   child: const Icon(Icons.person_add),
+        // ),
       ),
     );
   }

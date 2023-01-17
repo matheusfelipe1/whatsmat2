@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:whatsmat/views/splash/splash_controller.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -10,13 +11,12 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  final controller = Modular.get<SplashController>();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      Modular.to.pushNamed('/login/');
-    });
+    controller.verifyHasUserLogged();
   }
   @override
   Widget build(BuildContext context) {
@@ -32,6 +32,8 @@ class _SplashState extends State<Splash> {
               'Seja bem vindo ao WhatsMat!',
               style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic, color: Colors.white),
             ),
+            SizedBox(height: 45,),
+            CircularProgressIndicator()
           ],
         ),
       ),
