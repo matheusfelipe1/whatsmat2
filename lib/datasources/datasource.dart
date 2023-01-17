@@ -5,6 +5,7 @@ import 'package:whatsmat/models/user_model.dart';
 
 class DataSource {
   final String colletionUser = 'User';
+  final String child = 'Chat';
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -36,5 +37,33 @@ class DataSource {
 
   Future<void> signout() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future<String> createChat(String myId, String personId) async {
+    final idChat = _firebaseDatabase.ref().child(child).push().key;
+    await _firebaseDatabase.ref().child(child).child(idChat!).set({
+      'datetime': DateTime.now().toIso8601String(),
+      'senderId': myId,
+      'recipientId': personId,
+      'id': idChat
+    });
+    return idChat;
+  }
+
+  Future<void> addMessages(String myId, String personId, String value, String idChat) async {
+    final idMessage = _firebaseDatabase.ref().child(child).child(idChat).child('messages').push().key;
+    await _firebaseDatabase.ref().child(child).child(idChat).child('messages').child(idMessage!).set({
+      'datetime': DateTime.now().toIso8601String(),
+      'senderId': myId,
+      'recipientId': personId,
+      'id': idMessage,
+      'value': value
+    });
+  }
+
+  Future<List<dynamic>> getChats(String id) async {
+    DataSnapshot recipient = await _firebaseDatabase.ref().child(child).orderByChild('recipientId').equalTo(id).get();
+    DataSnapshot sender = await _firebaseDatabase.ref().child(child).orderByChild('senderId').equalTo(id).get();
+    return [recipient, sender];
   }
 }

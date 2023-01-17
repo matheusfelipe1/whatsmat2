@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:whatsmat/views/chat/chat_screen.dart';
 
+import '../views/chat/chat.dart';
 import '../views/home/home.dart';
 import '../views/home/home_screen.dart';
 
@@ -9,7 +10,8 @@ class HomeModule extends Module {
   // TODO: implement binds
   List<Bind<Object>> get binds => 
   [
-    Bind.singleton((i) => Home())
+    Bind.singleton((i) => Home()),
+    Bind.singleton((i) => Chat())
   ];
   @override
   // TODO: implement routes
@@ -19,7 +21,7 @@ class HomeModule extends Module {
             transition: TransitionType.downToUp,
             duration: const Duration(milliseconds: 500)),
         ChildRoute('/chat',
-            child: (context, args) => const Chat(),
+            child: (context, args) => ChatScreen(chat: args.data),
             transition: TransitionType.downToUp,
             duration: const Duration(milliseconds: 500)),
       ];

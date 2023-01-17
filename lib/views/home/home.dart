@@ -15,6 +15,7 @@ abstract class HomeBase with Store {
 
   @observable
   List<ChatModel> chats = [];
+  ChatModel selectedChat = ChatModel();
   List<ChatModel> cached = [];
 
   @action

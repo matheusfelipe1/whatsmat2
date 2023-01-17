@@ -21,6 +21,7 @@ class _HomeState extends State<HomeScreen> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 89, 180, 254),
           automaticallyImplyLeading: false,
           title: const Text('Home'),
           actions: [
@@ -82,6 +83,11 @@ class _HomeState extends State<HomeScreen> {
                       itemCount: _home.chats.length,
                       itemBuilder: ((context, index) {
                         return CardList(
+                            func: () {
+                              _home.selectedChat = _home.chats[index];
+                              Modular.to.pushNamed('/home/chat',
+                                  arguments: _home.selectedChat);
+                            },
                             datetime:
                                 _home.chats[index].messages!.last.datetime!,
                             message: _home.chats[index].messages!.last.value!,
@@ -92,10 +98,10 @@ class _HomeState extends State<HomeScreen> {
             )
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: _home.addChats,
-        //   child: const Icon(Icons.person_add),
-        // ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _home.addChats,
+          child: const Icon(Icons.person_add),
+        ),
       ),
     );
   }

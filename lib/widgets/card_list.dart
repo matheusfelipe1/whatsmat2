@@ -5,16 +5,18 @@ class CardList extends StatelessWidget {
   final String name;
   final String datetime;
   final String message;
+  final VoidCallback func;
 
   const CardList(
       {super.key,
       required this.datetime,
       required this.message,
-      required this.name});
+      required this.name,required this.func});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: func,
       leading: CircleAvatar(
           child: Center(
         child: Text(getFirstLetter(name)),

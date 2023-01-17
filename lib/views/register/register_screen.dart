@@ -25,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 89, 180, 254),
         automaticallyImplyLeading: true,
         title: const Text('Cadastro'),
       ),
