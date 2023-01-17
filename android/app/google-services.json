@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "722480582931",
+    "project_id": "whatsmat-72da8",
+    "storage_bucket": "whatsmat-72da8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722480582931:android:dc267b91a590c97636cae6",
+        "android_client_info": {
+          "package_name": "com.example.whatsmat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "722480582931-omnad8ggospcj5mk7m1h7sku2ugmlc5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWrcDBf-JsuL56Z1g9lr7QtJE85bImgz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722480582931-omnad8ggospcj5mk7m1h7sku2ugmlc5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
