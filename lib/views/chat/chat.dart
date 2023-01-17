@@ -14,7 +14,6 @@ abstract class ChatBase with Store {
 
   String get myId  => _chatRepository.getIdUser();
 
-  String? idChat;
 
   @observable
   List<Messages> messages = [];
@@ -23,17 +22,8 @@ abstract class ChatBase with Store {
   ChatModel chatSelected = ChatModel();
 
   @action
-  createChat(String value) async {
-    idChat = await _chatRepository.createChat(myId, "54646dc5ev");
-    addMessage(value);
-  }
-
-  @action
   addMessage(String value) async {
-    await _chatRepository.addMessages(myId, "54646dc5ev", value, idChat!);
+    await _chatRepository.addMessages(myId, chatSelected.profile!.id!, value, chatSelected.id!);
   }
 
-  getChats() async {
-    await _chatRepository.getChats(myId);
-  }
 }

@@ -24,6 +24,14 @@ mixin _$Home on HomeBase, Store {
     });
   }
 
+  late final _$getListChatsAsyncAction =
+      AsyncAction('HomeBase.getListChats', context: context);
+
+  @override
+  Future getListChats() {
+    return _$getListChatsAsyncAction.run(() => super.getListChats());
+  }
+
   late final _$HomeBaseActionController =
       ActionController(name: 'HomeBase', context: context);
 

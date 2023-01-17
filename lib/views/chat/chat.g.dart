@@ -40,6 +40,14 @@ mixin _$Chat on ChatBase, Store {
     });
   }
 
+  late final _$addMessageAsyncAction =
+      AsyncAction('ChatBase.addMessage', context: context);
+
+  @override
+  Future addMessage(String value) {
+    return _$addMessageAsyncAction.run(() => super.addMessage(value));
+  }
+
   @override
   String toString() {
     return '''

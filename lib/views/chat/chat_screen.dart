@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:whatsmat/main.dart';
 import 'package:whatsmat/views/chat/chat.dart';
 
 import '../../models/chat_models.dart';
@@ -22,8 +23,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _controller.getChats();
+    _controller.chatSelected = widget.chat;
+    _controller.messages = widget.chat.messages!;
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -82,8 +85,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               IconButton(
-                  onPressed: () {
-                    _controller.addMessage(msg.text.trim());
+                  onPressed: () async {
+                    await _controller.addMessage(msg.text.trim());
+                    msg.clear();
                   },
                   icon: const Icon(Icons.send))
             ],
@@ -98,7 +102,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return Align(
       alignment: Alignment.topRight,
       child: Container(
-        constraints: BoxConstraints(maxWidth: size.width * .8),
+        constraints: BoxConstraints(maxWidth: size.width * .8, minWidth: size.width * .3),
+        margin: EdgeInsets.only(top: size.height * 0.02),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
@@ -108,9 +113,29 @@ class _ChatScreenState extends State<ChatScreen> {
           color: (Colors.blue[200]),
         ),
         padding: const EdgeInsets.all(16),
-        child: Text(
-          msg,
-          style: const TextStyle(fontSize: 15),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Text(
+                  msg,
+                  style: const TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Text(
+                datetime.datePtBR(),
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 111, 111, 111), fontSize: 12),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -121,7 +146,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return Align(
       alignment: Alignment.topLeft,
       child: Container(
-        constraints: BoxConstraints(maxWidth: size.width * .8),
+        constraints: BoxConstraints(maxWidth: size.width * .8, minWidth: size.width * .3),
+         margin: EdgeInsets.only(top: size.height * 0.02),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
@@ -131,9 +157,29 @@ class _ChatScreenState extends State<ChatScreen> {
           color: Colors.grey.shade200,
         ),
         padding: const EdgeInsets.all(16),
-        child: Text(
-          msg,
-          style: const TextStyle(fontSize: 15),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Text(
+                  msg,
+                  style: const TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Text(
+                datetime.datePtBR(),
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 111, 111, 111), fontSize: 12),
+              ),
+            )
+          ],
         ),
       ),
     );

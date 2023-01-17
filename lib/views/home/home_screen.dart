@@ -14,6 +14,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeState extends State<HomeScreen> {
   final _home = Modular.get<Home>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _home.getListChats();
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

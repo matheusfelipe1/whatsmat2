@@ -5,7 +5,7 @@ import 'package:whatsmat/models/user_model.dart';
 
 class DataSource {
   final String colletionUser = 'User';
-  final String child = 'Chat';
+  final String child = 'messages';
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -15,16 +15,17 @@ class DataSource {
         email: email, password: password);
   }
 
-  Future<UserCredential> createUserWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> createUserWithEmailAndPassword(
+      String email, String password) async {
     return await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
   }
 
   Future<void> register(String email, String name, String id) async {
-    await _firebaseFirestore.collection(colletionUser).doc(id).set({
-      'name': name,
-      'email': email
-    });
+    await _firebaseFirestore
+        .collection(colletionUser)
+        .doc(id)
+        .set({'name': name, 'email': email});
   }
 
   Future<dynamic> getUserById(String id) async {
@@ -50,20 +51,57 @@ class DataSource {
     return idChat;
   }
 
-  Future<void> addMessages(String myId, String personId, String value, String idChat) async {
-    final idMessage = _firebaseDatabase.ref().child(child).child(idChat).child('messages').push().key;
-    await _firebaseDatabase.ref().child(child).child(idChat).child('messages').child(idMessage!).set({
-      'datetime': DateTime.now().toIso8601String(),
-      'senderId': myId,
-      'recipientId': personId,
-      'id': idMessage,
-      'value': value
-    });
+  Future<void> addMessages(
+      String myId, String personId, String value, String idChat) async {
+    final idMessage = _firebaseDatabase
+        .ref()
+        .child(child)
+        .child(idChat)
+        .child('messages')
+        .push()
+        .key;
+    await Future.wait([
+      _firebaseDatabase
+          .ref()
+          .child(child)
+          .child(idChat)
+          .update({'datetime': DateTime.now().toIso8601String()}),
+      _firebaseDatabase
+          .ref()
+          .child(child)
+          .child(idChat)
+          .child('messages')
+          .child(idMessage!)
+          .set({
+        'datetime': DateTime.now().toIso8601String(),
+        'senderId': myId,
+        'recipientId': personId,
+        'id': idMessage,
+        'value': value
+      })
+    ]);
   }
 
-  Future<List<dynamic>> getChats(String id) async {
-    DataSnapshot recipient = await _firebaseDatabase.ref().child(child).orderByChild('recipientId').equalTo(id).get();
-    DataSnapshot sender = await _firebaseDatabase.ref().child(child).orderByChild('senderId').equalTo(id).get();
-    return [recipient, sender];
+  Future<List> getChats(String id) async {
+    List<dynamic> returns = [];
+    DataSnapshot recipient = await _firebaseDatabase
+        .ref()
+        .child(child)
+        .orderByChild('recipientId')
+        .equalTo(id)
+        .get();
+    DataSnapshot sender = await _firebaseDatabase
+        .ref()
+        .child(child)
+        .orderByChild('senderId')
+        .equalTo(id)
+        .get();
+    if (recipient.value != null) {
+      returns.add(recipient.value);
+    }
+    if (sender.value != null) {
+      returns.add(sender.value);
+    }
+    return returns;
   }
 }
