@@ -47,6 +47,17 @@ mixin _$Home on HomeBase, Store {
   }
 
   @override
+  dynamic listenChats() {
+    final _$actionInfo =
+        _$HomeBaseActionController.startAction(name: 'HomeBase.listenChats');
+    try {
+      return super.listenChats();
+    } finally {
+      _$HomeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 chats: ${chats}

@@ -20,6 +20,7 @@ class _HomeState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     _home.getListChats();
+    _home.listenChats();
   }
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class _HomeState extends State<HomeScreen> {
                         return CardList(
                             func: () {
                               _home.selectedChat = _home.chats[index];
-                              Modular.to.pushNamed('/home/chat',
+                              Modular.to.pushNamed('/home/chat/',
                                   arguments: _home.selectedChat);
                             },
                             datetime:

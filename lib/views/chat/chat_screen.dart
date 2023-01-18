@@ -18,13 +18,31 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _controller = Modular.get<Chat>();
   final msg = TextEditingController();
-
+  final scroll = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _controller.chatSelected = widget.chat;
     _controller.messages = widget.chat.messages!;
+    _controller.listeningChat();
+    Future.delayed(const Duration(milliseconds: 2), () {
+      scroll.animateTo(scroll.position.maxScrollExtent, duration: const Duration(microseconds: 500), curve: Curves.bounceIn);
+    });
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    _controller.removeListening();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.removeListening();
   }
 
   @override
@@ -38,19 +56,21 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Stack(
         children: [
-          Image.asset(
-            'assets/app/chat.jpeg',
+          Container(
+            width: size.width,
             height: size.height,
-            fit: BoxFit.fill,
+            color: Colors.white24,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5.0, right: 5.0),
             child: Observer(
               builder: (_) => SizedBox(
-                height: size.height * .8,
+                height: size.height * .76,
                 child: ListView.builder(
+                  controller: scroll,
                   itemCount: _controller.messages.length,
                   itemBuilder: (context, index) {
+                    _controller.messages.reversed;
                     return redirectWidget(_controller.messages[index]);
                   },
                 ),
@@ -88,6 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   onPressed: () async {
                     await _controller.addMessage(msg.text.trim());
                     msg.clear();
+                    scroll.animateTo(scroll.position.maxScrollExtent, duration: const Duration(microseconds: 500), curve: Curves.bounceIn);
                   },
                   icon: const Icon(Icons.send))
             ],

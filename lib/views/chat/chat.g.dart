@@ -48,6 +48,31 @@ mixin _$Chat on ChatBase, Store {
     return _$addMessageAsyncAction.run(() => super.addMessage(value));
   }
 
+  late final _$ChatBaseActionController =
+      ActionController(name: 'ChatBase', context: context);
+
+  @override
+  dynamic listeningChat() {
+    final _$actionInfo =
+        _$ChatBaseActionController.startAction(name: 'ChatBase.listeningChat');
+    try {
+      return super.listeningChat();
+    } finally {
+      _$ChatBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeListening() {
+    final _$actionInfo = _$ChatBaseActionController.startAction(
+        name: 'ChatBase.removeListening');
+    try {
+      return super.removeListening();
+    } finally {
+      _$ChatBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

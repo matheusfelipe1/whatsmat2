@@ -14,6 +14,6 @@ class RegisterModule extends Module {
         ChildRoute('/',
             child: (context, arg) => const RegisterScreen(),
             transition: TransitionType.downToUp,
-            duration: const Duration(milliseconds: 500))
+            duration: const Duration(milliseconds: 100))
       ];
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -17,7 +18,8 @@ class Home = HomeBase with _$Home;
 abstract class HomeBase with Store {
   final ISessionRepository _iSessionRepository = SessinRepository();
   final IChatRepository _chatRepository = ChatRepository();
-  String get myId  => _chatRepository.getIdUser();
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+  String get myId => _chatRepository.getIdUser();
 
   @observable
   List<ChatModel> chats = [];
@@ -48,10 +50,36 @@ abstract class HomeBase with Store {
     await _iSessionRepository.signout();
     Modular.to.pushReplacementNamed('/login/');
   }
-  
+
   @action
   getListChats() async {
     chats = await _chatRepository.getChats(myId);
     chats.sort((a, b) => a.datetime!.date().compareTo(b.datetime!.date()));
+  }
+
+  @action
+  listenChats() {
+    _firebaseDatabase.ref().child('messages').onValue.listen((event) {
+      final List list = [];
+      final List finalDatas = [];
+      Map data = event.snapshot.value as Map;
+      data.forEach((key, value) {
+        if (value['senderId'] == myId || value['recipientId'] == myId) {
+          list.add(value);
+        }
+      });
+      for (var element in list) {
+        finalDatas.add(element);
+      }
+      List<ChatModel> _chats = finalDatas.map(ChatModel.fromJson).toList();
+      for (var item in chats) {
+        for (var item2 in _chats) {
+          if (item.id == item2.id) {
+            item.messages = item2.messages;
+          }
+        }
+      }
+      chats = chats;
+    });
   }
 }
